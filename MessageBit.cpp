@@ -1,6 +1,76 @@
 #include "MessageBit.h"
 
+#include <vector>
+
 void repeatPrint(std::ostream& stream, std::string message, int n);
+
+int MessageBit::size() const
+{
+	unsigned long long q;
+	int nBits;
+
+	q = n;
+	nBits = 0;
+
+	do
+	{
+		nBits += 1;
+		q /= 2;
+	} while (q != 0);
+
+	return nBits;
+}
+
+MessageBit MessageBit::LFSR(const MessageBit& p) const
+{
+	std::vector<MessageBit> registers = std::vector<MessageBit>(p.size() - 1);
+	MessageBit lfsr;
+	MessageBit currentBit;
+
+	std::cout << std::endl;
+	for (int i = 0; i < registers.size(); i++)
+	{
+		std::cout << "R" << registers.size() - 1 - i << " | ";
+	}
+	std::cout << "I | R" << registers.size() - 1 << "^I";
+	std::cout << std::endl;
+	repeatPrint(std::cout, "-", 40);
+	std::cout << std::endl;
+
+	for (int i = 0; i < size(); i++)
+	{
+		for (MessageBit bit : registers)
+		{
+			std::cout << " " << bit << " | ";
+		}
+
+		currentBit = MessageBit((*this)[i]);
+		MessageBit exitBit = (currentBit ^ registers[0]);
+		std::cout << currentBit << " |  " << exitBit << std::endl;
+
+		for (int i = 1; i < registers.size(); i++)
+		{
+			if (p[i].n == 1)
+			{
+				registers[i - 1] = exitBit ^ registers[i];
+			}
+			else
+			{
+				registers[i - 1] = registers[i];
+			}
+		}
+		registers[registers.size() - 1] = exitBit;
+	}
+
+	for (MessageBit bit : registers)
+	{
+		lfsr = lfsr + bit;
+		std::cout << " " << bit << " | ";
+	}
+	std::cout << std::endl;
+
+	return lfsr;
+}
 
 std::string MessageBit::convertToBit() const
 {
@@ -18,23 +88,6 @@ std::string MessageBit::convertToBit() const
 	} while (q != 0);
 
 	return bit;
-}
-
-int MessageBit::size() const
-{
-	unsigned long long q;
-	int nBits;
-
-	q = n;
-	nBits = 0;
-
-	do
-	{
-		nBits += 1;
-		q /= 2;
-	} while (q != 0);
-
-	return nBits;
 }
 
 MessageBit& MessageBit::operator=(const MessageBit& bit)
@@ -151,21 +204,4 @@ void repeatPrint(std::ostream& stream, std::string message, int n)
 	{
 		stream << message;
 	}
-}
-
-int MessageBit::calculateSize(long long n) const
-{
-	unsigned long long q;
-	int nBits;
-
-	q = n;
-	nBits = 0;
-
-	do
-	{
-		nBits += 1;
-		q /= 2;
-	} while (q != 0);
-
-	return nBits;
 }

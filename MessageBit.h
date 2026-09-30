@@ -6,11 +6,13 @@
 class MessageBit
 {
 public:
+	MessageBit() : n(0) {}
 	MessageBit(long long n) : n(n) {}
 	MessageBit(const MessageBit& copy) : n(copy.n) {}
 
-	std::string convertToBit() const;
 	int size() const;
+	MessageBit LFSR(const MessageBit& p) const;
+	std::string convertToBit() const;
 
 	MessageBit& operator=(const MessageBit& bit);
 	MessageBit operator[](int i) const;
@@ -25,6 +27,5 @@ public:
 
 private:
 	long long n;
-	int calculateSize(long long n) const;
 };
 
