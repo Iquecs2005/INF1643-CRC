@@ -5,6 +5,6 @@ C++ Program for CRC calculation by using either:
 
 How to compile:
 
-- Create new project on Visual Studio
-- Insert files
+- Dowload files
+- Open 'T1 Redes.sln' in Visul Studio
 - Compile and run
